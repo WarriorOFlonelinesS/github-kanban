@@ -1,5 +1,5 @@
 
-import { memo, useEffect, useState } from "react";
+import { memo, useState } from "react";
 import { DragEvent } from "react";
 
 
@@ -15,6 +15,7 @@ type TBoard = {
 };
 
 interface IOptions {
+
     dropCardHandler: (e: DragEvent<HTMLDivElement>, board: TBoard) => void;
     dragOverHandler: (e: DragEvent<HTMLDivElement>) => void;
     dragStartHandler: (
@@ -60,7 +61,7 @@ const Board: React.FC<IProps & IOptions> = ({ items, options, board, currentItem
                 dragLeaveHandler(e);
                 setDraggedOver(false);
             }}
-            onDrop={(e) => {
+            onDrop={() => {
 
                 setDraggedOver(false);
             }}
@@ -75,11 +76,16 @@ const Board: React.FC<IProps & IOptions> = ({ items, options, board, currentItem
                     return (
                         <div
                             className={`column-item ${currentItem === item ? "dragged" : ""}`}
-                            key={item.id}
-                            onDragOver={(e) => dragOverHandler(e)}
-                            onDragLeave={(e) => dragLeaveHandler(e)}
+                            key={Math.random() * 10}
+                            onDragOver={(e) => {
+                                dragOverHandler(e);
+                                if (!draggedOver) {
+                                    setDraggedOver(true)
+                                }
+                            }}
+                            onDragLeave={dragLeaveHandler}
                             onDragStart={(e) => dragStartHandler(e, board, item)}
-                            onDragEnd={(e) => dragEndHandler(e)}
+                            onDragEnd={dragEndHandler}
                             onDrop={(e) => {
                                 dropHandler(e, board, item);
                                 setDraggedOver(false);

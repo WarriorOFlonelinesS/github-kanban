@@ -15,8 +15,12 @@ const issuesSlice = createSlice({
     getAllIssuesSuccess: (state, action) => {
       state.status = "succeeded";
       state.allIssues = [...action.payload];
-      state.openIssues = [...action.payload.filter((issue) => issue.state === 'open')];
-      state.closedIssues = [...action.payload.filter((issue) => issue.state === 'closed')];
+      state.openIssues = [
+        ...action.payload.filter((issue) => issue.state === "open"),
+      ];
+      state.closedIssues = [
+        ...action.payload.filter((issue) => issue.state === "closed"),
+      ];
     },
     getIssuesFailure: (state, action) => {
       state.status = "failed";
@@ -25,6 +29,7 @@ const issuesSlice = createSlice({
   },
 });
 
-export const { getIssuesSuccess, getIssuesFailure } = issuesSlice.actions;
+export const { getAllIssuesSuccess, getOpenIssuesSuccess, getIssuesFailure } =
+  issuesSlice.actions;
 
 export default issuesSlice.reducer;

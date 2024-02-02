@@ -1,8 +1,7 @@
 
-import { useDispatch, useSelector } from "react-redux";
-import { getIssues } from "../redux/features/actions";
+import { useSelector } from "react-redux";
 import Board from "./Board"
-import { DragEvent, useEffect, useState } from "react";
+import React, { DragEvent, useEffect, useState } from "react";
 import { RootState, useAppDispatch } from "../redux/store";
 
 type TItem = {
@@ -25,7 +24,7 @@ export default function Main() {
         if (currentItem && currentBoard?.items && board.items) {
             const updatedCurrentBoardItems = [...currentBoard.items];
             const updatedBoardItems = [...board.items];
-            const currentIndex =  updatedCurrentBoardItems.indexOf(currentItem);
+            const currentIndex = updatedCurrentBoardItems.indexOf(currentItem);
             if (currentIndex !== -1) {
                 updatedCurrentBoardItems.splice(currentIndex, 1);
                 updatedBoardItems.push(currentItem);
@@ -89,18 +88,9 @@ export default function Main() {
             };
         };
     };
-    const dispatch = useAppDispatch()
 
     const allIssues = useSelector((state: RootState) => state.issues.allIssues)
-
     useEffect(() => {
-        if (allIssues.length === 0) {
-            dispatch(getIssues());
-        }
-    }, [dispatch, allIssues]);
-
-    useEffect(() => {
-        // После успешного получения данных, обновите столбец "ToDo"
         setBoards(prevBoards => [
             ...prevBoards.map(b =>
                 b.id === 1
@@ -111,7 +101,6 @@ export default function Main() {
     }, [allIssues]);
     const openIssues = useSelector((state: RootState) => state.issues.openIssues)
     useEffect(() => {
-        // После успешного получения данных, обновите столбец "In Process"
         setBoards(prevBoards => [
             ...prevBoards.map(b =>
                 b.id === 2
@@ -121,8 +110,9 @@ export default function Main() {
         ]);
     }, [openIssues]);
     const closedIssues = useSelector((state: RootState) => state.issues.closedIssues);
+
     useEffect(() => {
-        // После успешного получения данных, обновите столбец "Done"
+
         setBoards(prevBoards => [
             ...prevBoards.map(b =>
                 b.id === 3
@@ -137,14 +127,16 @@ export default function Main() {
         { id: 2, title: 'In Process', items: openIssues },
         { id: 3, title: 'Done', items: closedIssues }
     ])
-    const option = {
-        dropCardHandler: dropCardHandler,
-        dragOverHandler: dragOverHandler,
-        dragStartHandler: dragStartHandler,
-        dragEndHandler: dragEndHandler,
-        dropHandler: dropHandler,
-        dragLeaveHandler: dragLeaveHandler,
-    }
+    const option = React.useMemo(() => {
+        return {
+            dropCardHandler,
+            dragOverHandler,
+            dragStartHandler,
+            dragEndHandler,
+            dropHandler,
+            dragLeaveHandler,
+        };
+    }, [dropCardHandler, dragOverHandler, dragStartHandler, dragEndHandler, dropHandler, dragLeaveHandler]);
     return (
         <div className="main">
             <div className="container">

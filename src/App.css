@@ -106,8 +106,14 @@
   z-index: 1;
   box-shadow: 0  0  10px  rgba(0,0,0.25);
   opacity: 0.75;
-  cursor: pointer;
+  cursor: grabbing;
+
 }
+
+.column-item:hover{
+    cursor: grab;
+}
+
 
 .item__header {
   margin-bottom: -10px;
