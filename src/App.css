@@ -2,6 +2,16 @@
   margin: 0 20px;
 }
 
+.loader {
+  margin-top: 56px;
+  width: 119px;
+}
+
+.header-content{
+  display: flex;
+  align-items: center;
+}
+
 .header-form {
   display: flex;
   justify-content: space-between;
@@ -38,7 +48,12 @@
   font-family: "IBM Plex Mono";
   display: flex;
   align-items: center;
-  margin-top: -10px;
+  margin-top: 4px;
+}
+
+.navigation-rating{
+  display: flex;
+  margin-top: 10px;
 }
 
 .navigation__link {
@@ -80,23 +95,23 @@
   flex-direction: column;
   align-items: center;
   min-width: 283px;
-  min-height: 490px;
+  min-height: 390px;
   flex-shrink: 0;
-  background: #d9d9d9;
   margin-top: -10px;
 }
 
 .column-area.dragged-over {
-  margin-bottom: 120px; 
+  margin-bottom: 120px;
 }
 
 .column-item {
-  width: 240.778px;
-  height: 113.262px;
+  width: 252px;
+  height: 144px;
+  border: 1px solid black;
   flex-shrink: 0;
-  border-radius: 31px;
+  border-radius: 14px;
   background: #fff;
-  margin-top: 5px;
+  margin-top: 20px;
   text-align: start;
   padding-left: 10px;
   transition: opacity 0.3s ease;
@@ -104,16 +119,14 @@
 
 .column-item.dragged {
   z-index: 1;
-  box-shadow: 0  0  10px  rgba(0,0,0.25);
+  box-shadow: 0 0 10px rgb(255, 0, 0);
   opacity: 0.75;
   cursor: grabbing;
-
 }
 
-.column-item:hover{
-    cursor: grab;
+.column-item:hover {
+  cursor: grab;
 }
-
 
 .item__header {
   margin-bottom: -10px;
@@ -121,14 +134,33 @@
 }
 
 .item__text {
-  color: #a3a3a3;
+  color: #666666;
   margin-bottom: -10px;
 }
 
 .item__status {
-  color: #a3a3a3;
+  color: #666666;
 }
 
 .column-area.dragged-over {
   margin-bottom: -20px;
+}
+
+.ant-list {
+  margin-top: 55px;
+}
+
+.ant-row {
+  margin-left: -5px;
+  margin-right: -5px;
+  display: flex;
+  justify-content: center;
+}
+
+.ant-card-head {
+  background-color: #dedede !important;
+}
+
+.ant-card-body {
+  border: 1px solid #e1e1e1;
 }

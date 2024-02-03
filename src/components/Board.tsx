@@ -1,104 +1,145 @@
+import { useSelector } from "react-redux";
+import Column from "./Column"
+import { DragEvent, useEffect, useState } from "react";
+import {
+    getAllIssues,
+    getIsLoading,
+} from "../redux/issues/selectors";
+import { TIssue } from "../redux/issues/types";
+import { Spin } from "antd";
 
-import { memo, useState } from "react";
-import { DragEvent } from "react";
-
-
-type TItem = {
-    title: string;
+type TColumn = {
     id: number;
+    title: string;
+    data: Array<TIssue>;
 };
 
-type TBoard = {
-    title: string;
-    items?: TItem[];
-    id: number;
-};
+export const Board = () => {
+    const [currentColumn, setCurrentColumn] = useState<number | null>(null);
+    const [currentIssue, setCurrentIssue] = useState<TIssue | null>(null);
 
-interface IOptions {
+    const isLoading = useSelector(getIsLoading);
+    const allIssues = useSelector(getAllIssues);
 
-    dropCardHandler: (e: DragEvent<HTMLDivElement>, board: TBoard) => void;
-    dragOverHandler: (e: DragEvent<HTMLDivElement>) => void;
-    dragStartHandler: (
+    const [columns, setColumns] = useState<Array<TColumn>>([
+        { id: 1, title: 'ToDo', data: [] },
+        { id: 2, title: 'In Progress', data: [] },
+        { id: 3, title: 'Done', data: [] }
+    ])
+
+    useEffect(() => {
+        if (!isLoading) {
+            setColumns(columns.map((column, key) => ({ ...column, data: allIssues[key as 0 | 1 | 2] })))
+        }
+    }, [isLoading]);
+
+    const updateDataInColumn = (columnId: number, newData: Array<TIssue>) => {
+        console.log({ columnId, newData })
+        setColumns(columns.map(column => column.id === columnId
+            ? { ...column, data: newData as Array<TIssue> }
+            : column
+        ))
+    }
+
+    const removeTaskFromColumn = (columnId: number, taskId: number) => {
+        const column = columns.find(column => column.id === columnId)
+        if (column) {
+            const newData = column.data.filter(task => task.id !== taskId)
+            updateDataInColumn(columnId, newData)
+        }
+    }
+
+    const addTaskToColumn = (columnId: number, task: TIssue, positionNumber: number) => {
+        const column = columns.find(column => column.id === columnId)
+        if (column) {
+            const newData = column.data.length
+                ? [...column.data.slice(0, positionNumber), task, ...column.data.slice(positionNumber)]
+                : [task]
+            updateDataInColumn(columnId, newData)
+        }
+    }
+
+    const dragOverHandler = (e: DragEvent<HTMLDivElement>): void => {
+        e.preventDefault();
+        const target = e.currentTarget as HTMLDivElement;
+        if (target.className === "column-item") {
+            target.style.boxShadow = "0 1px 3px black";
+        }
+    }
+
+    const dragLeaveHandler = (e: DragEvent<HTMLDivElement>): void => {
+        const target = e.currentTarget as HTMLDivElement;
+        target.style.boxShadow = "none";
+    }
+
+    const handleStartDrag = (
         e: DragEvent<HTMLDivElement>,
-        board: TBoard,
-        item: TItem,
-    ) => void;
-    dragEndHandler: (e: DragEvent<HTMLDivElement>) => void;
-    dropHandler: (
+        columnId: number,
+        issue: TIssue): void => {
+        const target = e.currentTarget as HTMLDivElement;
+        target.style.boxShadow = "none";
+        console.log('dragStartHandler', columnId, issue)
+        setCurrentColumn(columnId)
+        setCurrentIssue(issue)
+    };
+
+    const dragEndHandler = (e: DragEvent<HTMLDivElement>): void => {
+        const target = e.currentTarget as HTMLDivElement;
+        target.style.boxShadow = "none";
+        console.log('dragEndHandler')
+        setCurrentColumn(null);
+        setCurrentIssue(null);
+    }
+
+    const handleDropColumn = (e: DragEvent<HTMLDivElement>, columnId: number): void => {
+        console.log('handleDropColumn', columnId, currentIssue, currentColumn)
+        e.preventDefault();
+        if (currentIssue && currentColumn && columnId) {
+            removeTaskFromColumn(currentColumn, currentIssue.id);
+            addTaskToColumn(columnId, currentIssue, 0);
+        };
+    };
+
+    const handleDropTask = ( 
         e: DragEvent<HTMLDivElement>,
-        board: TBoard,
-        item: TItem
-    ) => void;
-    dragLeaveHandler: (e: DragEvent<HTMLDivElement>) => void;
-}
+        columnId: number,
+        issue: TIssue): void => {
+        e.preventDefault();
+        console.log('handleDropTask', columnId, issue)
+        const target = e.currentTarget as HTMLDivElement;
+        target.style.boxShadow = "none";
+    }
 
-interface IProps {
-    items?: TItem[];
-    options: IOptions;
-    board: TBoard;
-    currentItem: TItem | null;
-}
-
-
-const Board: React.FC<IProps & IOptions> = ({ items, options, board, currentItem }) => {
-    const [draggedOver, setDraggedOver] = useState(false);
-    const {
-        dropCardHandler,
-        dragOverHandler,
-        dragStartHandler,
-        dragEndHandler,
-        dropHandler,
-        dragLeaveHandler,
-    } = options;
 
     return (
-        <div className="column"
-            onDragOver={(e) => {
-                dragOverHandler(e);
-                setDraggedOver(true);
-            }}
-            onDragLeave={(e) => {
-                dragLeaveHandler(e);
-                setDraggedOver(false);
-            }}
-            onDrop={() => {
-
-                setDraggedOver(false);
-            }}
-        >
-            <p className="column__title">{board.title}</p>
-            <div
-                className={`column-area ${draggedOver ? "dragged-over" : ""}`}
-                onDragOver={(e) => dragOverHandler(e)}
-                onDrop={(e) => dropCardHandler(e, board)}
-            >
-                {items?.map((item) => {
-                    return (
-                        <div
-                            className={`column-item ${currentItem === item ? "dragged" : ""}`}
-                            key={Math.random() * 10}
-                            onDragOver={(e) => {
-                                dragOverHandler(e);
-                                if (!draggedOver) {
-                                    setDraggedOver(true)
-                                }
-                            }}
-                            onDragLeave={dragLeaveHandler}
-                            onDragStart={(e) => dragStartHandler(e, board, item)}
-                            onDragEnd={dragEndHandler}
-                            onDrop={(e) => {
-                                dropHandler(e, board, item);
-                                setDraggedOver(false);
-                            }}
-                            draggable={true}
-                        >
-                            <p className="item__header">{item.title}</p>
+        <div className="main">
+            <div className="container">
+                <div className="main-content">
+                    {isLoading
+                        ? <div className="loader">
+                            <Spin tip="Issues are loading" size="large">
+                                <div className="content" />
+                            </Spin>
                         </div>
-                    );
-                })}
+                        :
+                        <Column
+                            onDropColumn={handleDropColumn}
+                            onDragStart={handleStartDrag}
+                            onDragEnd={dragEndHandler}
+                            onDragOver={dragOverHandler}
+                            onDragLeave={dragLeaveHandler}
+                            onDropTask={handleDropTask}
+                            currentIssue={currentIssue}
+                            dataSource={columns} 
+                            column={{
+                                title: "",
+                                data: [],
+                                id: 0
+                            }}                        
+                        />
+                    }
+                </div>
             </div>
         </div>
-    );
+    )
 }
-
-export default memo(Board);
