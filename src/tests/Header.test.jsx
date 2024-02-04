@@ -1,48 +1,63 @@
-import { mount } from 'enzyme';
-import { act } from 'react-dom/test-utils';
-import { Header } from './Header';
-import { useAppDispatch } from '../redux/store';
+import React from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { Provider } from 'react-redux';
+import configureStore from 'redux-mock-store';
+import Header from '../components/Header';
 import { getAllIssuesRequest } from '../redux/issues/reducer';
 
-jest.mock('../redux/store');
+const mockStore = configureStore([]);
 
 describe('Header Component', () => {
-  it('should set searchValue on input change', () => {
-    const wrapper = mount(<Header />);
-    const input = wrapper.find('input');
+  let store;
 
-    act(() => {
-      input.simulate('change', { target: { value: 'https://github.com/repo' } });
+  beforeEach(() => {
+    store = mockStore({
+      issues: {
+
+      },
     });
-
-    expect(wrapper.find('Search').prop('value')).toEqual('https://github.com/repo');
   });
 
-  it('should dispatch getAllIssuesRequest on valid search and clear error', () => {
-    const dispatchMock = jest.fn();
-    useAppDispatch.mockReturnValue(dispatchMock);
+  test('renders Header component', () => {
+    render(
+      <Provider store={store}>
+        <Header />
+      </Provider>
+    );
 
-    const wrapper = mount(<Header />);
-    const input = wrapper.find('input');
-    const form = wrapper.find('form');
 
-    act(() => {
-      input.simulate('change', { target: { value: 'https://github.com/repo' } });
-      form.simulate('submit');
-    });
-
-    expect(dispatchMock).toHaveBeenCalledWith(getAllIssuesRequest({ searchValue: 'https://github.com/repo' }));
-    expect(wrapper.find('Alert').exists()).toBe(false);
+    expect(screen.getByText('Enter repo URL')).toBeInTheDocument();
   });
 
-  it('should show error message on empty search', () => {
-    const wrapper = mount(<Header />);
-    const form = wrapper.find('form');
+  test('dispatches getAllIssuesRequest on search', async () => {
+    render(
+      <Provider store={store}>
+        <Header />
+      </Provider>
+    );
 
-    act(() => {
-      form.simulate('submit');
+
+    userEvent.type(screen.getByPlaceholderText('Enter repo URL'), 'https://github.com/example/repo');
+
+    fireEvent.click(screen.getByText('Load issues'));
+
+    const actions = store.getActions();
+    expect(actions).toEqual([getAllIssuesRequest({ searchValue: 'https://github.com/example/repo' })]);
+
+  });
+
+  test('shows error message on invalid input', async () => {
+    render(
+      <Provider store={store}>
+        <Header />
+      </Provider>
+    );
+
+    fireEvent.click(screen.getByText('Load issues'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Invalid input!')).toBeInTheDocument();
     });
-
-    expect(wrapper.find('Alert').text()).toEqual('Invalid input!');
   });
 });

@@ -7,7 +7,11 @@
   width: 119px;
 }
 
-.header-content{
+.header {
+  margin-top: 10px;
+}
+
+.header-content {
   display: flex;
   align-items: center;
 }
@@ -47,13 +51,32 @@
 .navigation {
   font-family: "IBM Plex Mono";
   display: flex;
+  justify-content: space-between;
   align-items: center;
   margin-top: 4px;
 }
 
-.navigation-rating{
+.links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.repo-info {
   display: flex;
   margin-top: 10px;
+}
+
+.repo-info-item {
+  display: flex;
+  margin-right: 10px;
+  background-color: #eaeaea;
+  border-radius: 11px;
+  padding: 0 10px;
+}
+
+.repo-info-text {
+  margin-left: 10px;
 }
 
 .navigation__link {
@@ -72,8 +95,12 @@
 }
 
 .main-content {
+  margin-top: -20px;
+}
+
+.main-content.loaded {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   margin-top: -20px;
 }
 
@@ -100,11 +127,9 @@
   margin-top: -10px;
 }
 
-.column-area.dragged-over {
-  margin-bottom: 120px;
-}
-
 .column-item {
+  opacity: 1;
+  box-shadow: 0;
   width: 252px;
   height: 144px;
   border: 1px solid black;
@@ -119,8 +144,6 @@
 
 .column-item.dragged {
   z-index: 1;
-  box-shadow: 0 0 10px rgb(255, 0, 0);
-  opacity: 0.75;
   cursor: grabbing;
 }
 
@@ -143,7 +166,7 @@
 }
 
 .column-area.dragged-over {
-  margin-bottom: -20px;
+  margin-bottom: 20px;
 }
 
 .ant-list {
@@ -151,10 +174,8 @@
 }
 
 .ant-row {
-  margin-left: -5px;
-  margin-right: -5px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
 }
 
 .ant-card-head {

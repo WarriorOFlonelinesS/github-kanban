@@ -1,12 +1,11 @@
 import { memo, useState } from "react";
 import { DragEvent } from "react";
-import { TCurrentColumn } from "./types";
 import { TIssue } from "../redux/issues/types";
 import Issue from "./Issue";
 import { Card, List } from "antd";
+import { TColumn } from "./Board";
 
 type TProps = {
-    column: TCurrentColumn;
     currentIssue: TIssue | null;
     onDropColumn: (e: DragEvent<HTMLDivElement>, columnId: number) => void;
     onDragOver: (e: DragEvent<HTMLDivElement>) => void;
@@ -22,11 +21,11 @@ type TProps = {
     ) => void;
     onDragLeave: (e: DragEvent<HTMLDivElement>) => void;
     onDragEnd: (e: DragEvent<HTMLDivElement>) => void;
-    dataSource: any
+    columns: TColumn[]
 }
 
 const Column: React.FC<TProps> = ({
-    dataSource,
+    columns,
     currentIssue,
     onDropColumn,
     onDragOver,
@@ -36,7 +35,7 @@ const Column: React.FC<TProps> = ({
     onDragLeave,
 }) => {
     const [draggedOver, setDraggedOver] = useState(false);
-
+    console.log()
     return (
         <div className="column">
             <List
@@ -44,10 +43,10 @@ const Column: React.FC<TProps> = ({
                     gutter: 10,
                     xs: 1,
                 }}
-                dataSource={dataSource}
+                dataSource={columns}
                 renderItem={(item: TIssue) => (
                     <List.Item>
-                        <Card title={item.title} onDragOver={(e) => {
+                        <Card title={`${item.title} (${item.data.length})` } onDragOver={(e) => {
                             onDragOver(e);
                             setDraggedOver(true);
                         }}

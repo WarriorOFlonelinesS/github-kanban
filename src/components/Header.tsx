@@ -3,23 +3,24 @@ import { useAppDispatch } from "../redux/store";
 import { getAllIssuesRequest } from "../redux/issues/reducer";
 import { Alert } from "antd";
 import Search from "antd/es/input/Search";
+import { RepoInfo } from "./RepoInfo";
+import { TEvent } from "./types";
+import { parseRepoUrl } from "../redux/issues/urlHelpers/parseRepoUrl";
+import { Links } from "./Links";
 
 export const Header = () => {
     const dispatch = useAppDispatch();
-    const [searchValue, setSearchValue] = useState("");
-    const [error, setError] = useState(false)
-    const url = searchValue;
-    const match = url.match(/https:\/\/github\.com\/([^/]+)(\/([^/]+))?(\/([^/]+))?/);
-    const repo1 = match ? match[1] : "";
-    const repo2 = match ? match[3] : "";
-    const repo3 = match ? match[4] : "";
+    const [searchValue, setSearchValue] = useState<string>("");
+    const [error, setError] = useState<boolean>(false);
+    const { repo1, repo2, repo3 } = parseRepoUrl(searchValue);
 
-    const sendUrl = () => {
+    const sendUrl = (_: string, e: TEvent) => {
+        e?.preventDefault();
         if (searchValue.trim() === "") {
-            setError(true)
+            setError(true);
         } else {
             dispatch(getAllIssuesRequest({ searchValue: searchValue }));
-            setError(false)
+            setError(false);
         }
     };
 
@@ -30,7 +31,7 @@ export const Header = () => {
                     <Search
                         placeholder="Enter repo URL"
                         allowClear
-                        enterButton="Loading"
+                        enterButton="Load issues"
                         size="large"
                         onChange={(e) => setSearchValue(e.target.value)}
                         onSearch={sendUrl}
@@ -38,31 +39,12 @@ export const Header = () => {
                 </form>
                 {error && <Alert message="Invalid input!" type="error" />}
                 <div className="navigation">
-                    <a href={`https://github.com/${repo1}`} className="navigation__link">
-                        {repo1}
-                    </a>
-                    {repo2 && (
-                        <>
-                            <p className="navigation__arrow">&gt;</p>
-                            <a href={`https://github.com/${repo1}/${repo2}`} className="navigation__link">
-                                {repo2}
-                            </a>
-                        </>
-                    )}
-                    {repo3 && (
-                        <>
-                            <p className="navigation__arrow">&gt;</p>
-                            <a href={`https://github.com/${repo1}/${repo2}/${repo3}`} className="navigation__link">
-                                {repo3}
-                            </a>
-                        </>
-                    )}
-                    <div className="navigation-rating">
-                        <img src="images/Star.svg" alt="" />
-                        <p className="rating__text"></p>
-                    </div>
+                    <Links repo1={repo1} repo2={repo2} repo3={repo3} />
+                    <RepoInfo />
                 </div>
             </div>
         </div>
     );
-}
+};
+
+export default Header;

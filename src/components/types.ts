@@ -5,3 +5,11 @@ export type TCurrentColumn = {
   data: Array<TIssue>;
   id: number;
 };
+
+export type TColumnsState = Record<string, TCurrentColumn>;
+
+export type TEvent =
+  | React.ChangeEvent<HTMLInputElement>
+  | React.MouseEvent<HTMLElement>
+  | React.KeyboardEvent<HTMLInputElement>
+  | undefined;

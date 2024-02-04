@@ -8,7 +8,7 @@ import {
 import { TIssue } from "../redux/issues/types";
 import { Spin } from "antd";
 
-type TColumn = {
+export type TColumn = {
     id: number;
     title: string;
     data: Array<TIssue>;
@@ -17,15 +17,14 @@ type TColumn = {
 export const Board = () => {
     const [currentColumn, setCurrentColumn] = useState<number | null>(null);
     const [currentIssue, setCurrentIssue] = useState<TIssue | null>(null);
-
-    const isLoading = useSelector(getIsLoading);
-    const allIssues = useSelector(getAllIssues);
-
     const [columns, setColumns] = useState<Array<TColumn>>([
         { id: 1, title: 'ToDo', data: [] },
         { id: 2, title: 'In Progress', data: [] },
         { id: 3, title: 'Done', data: [] }
     ])
+
+    const allIssues = useSelector(getAllIssues);
+    const isLoading = useSelector(getIsLoading);
 
     useEffect(() => {
         if (!isLoading) {
@@ -33,31 +32,51 @@ export const Board = () => {
         }
     }, [isLoading]);
 
-    const updateDataInColumn = (columnId: number, newData: Array<TIssue>) => {
-        console.log({ columnId, newData })
-        setColumns(columns.map(column => column.id === columnId
-            ? { ...column, data: newData as Array<TIssue> }
-            : column
-        ))
-    }
-
     const removeTaskFromColumn = (columnId: number, taskId: number) => {
-        const column = columns.find(column => column.id === columnId)
-        if (column) {
-            const newData = column.data.filter(task => task.id !== taskId)
-            updateDataInColumn(columnId, newData)
-        }
+        return columns.map(column => {
+            if (column.id === columnId) {
+                return {
+                    ...column,
+                    data: column.data.filter(task => task.id !== taskId)
+                };
+            }
+            return column;
+        });
     }
 
     const addTaskToColumn = (columnId: number, task: TIssue, positionNumber: number) => {
-        const column = columns.find(column => column.id === columnId)
-        if (column) {
-            const newData = column.data.length
-                ? [...column.data.slice(0, positionNumber), task, ...column.data.slice(positionNumber)]
-                : [task]
-            updateDataInColumn(columnId, newData)
-        }
+        return columns.map(column => {
+            if (column.id === columnId) {
+                return {
+                    ...column,
+                    data: column.data.length
+                        ? [...column.data.slice(0, positionNumber), task, ...column.data.slice(positionNumber)]
+                        : [task]
+                };
+            }
+            return column;
+        });
     }
+
+    const updateBoard = (columnIdToRemove: number, columnIdToAdd: number) => {
+        console.log(columnIdToRemove, columnIdToAdd)
+        const removedColumns = removeTaskFromColumn(columnIdToRemove, currentIssue?.id as number);
+        const addedColumns = addTaskToColumn(columnIdToAdd, currentIssue as TIssue, 0);
+        const newColumns = columns.map(column => {
+            if (column.id !== columnIdToAdd || column.id !== columnIdToRemove) {
+                if (column.id === columnIdToRemove) {
+                    return { ...column, data: [...removedColumns.find(c => c.id === columnIdToRemove)?.data || []] };
+                }
+                if (column.id === columnIdToAdd) {
+                    return { ...column, data: [...addedColumns.find(c => c.id === columnIdToAdd)?.data || []] };
+                }
+            }
+            return column
+        });
+
+        setColumns(newColumns);
+    }
+
 
     const dragOverHandler = (e: DragEvent<HTMLDivElement>): void => {
         e.preventDefault();
@@ -78,7 +97,6 @@ export const Board = () => {
         issue: TIssue): void => {
         const target = e.currentTarget as HTMLDivElement;
         target.style.boxShadow = "none";
-        console.log('dragStartHandler', columnId, issue)
         setCurrentColumn(columnId)
         setCurrentIssue(issue)
     };
@@ -86,43 +104,34 @@ export const Board = () => {
     const dragEndHandler = (e: DragEvent<HTMLDivElement>): void => {
         const target = e.currentTarget as HTMLDivElement;
         target.style.boxShadow = "none";
-        console.log('dragEndHandler')
         setCurrentColumn(null);
         setCurrentIssue(null);
     }
 
     const handleDropColumn = (e: DragEvent<HTMLDivElement>, columnId: number): void => {
-        console.log('handleDropColumn', columnId, currentIssue, currentColumn)
         e.preventDefault();
         if (currentIssue && currentColumn && columnId) {
-            removeTaskFromColumn(currentColumn, currentIssue.id);
-            addTaskToColumn(columnId, currentIssue, 0);
-        };
+            updateBoard(currentColumn, columnId)
+        }
     };
 
-    const handleDropTask = ( 
-        e: DragEvent<HTMLDivElement>,
-        columnId: number,
-        issue: TIssue): void => {
+    const handleDropTask = (e: DragEvent<HTMLDivElement>, columnId: number, issue: TIssue): void => {
         e.preventDefault();
-        console.log('handleDropTask', columnId, issue)
         const target = e.currentTarget as HTMLDivElement;
         target.style.boxShadow = "none";
     }
 
-
     return (
         <div className="main">
             <div className="container">
-                <div className="main-content">
+                <div className={`main-content ${isLoading ? 'loaded' : ' '}`}>
                     {isLoading
                         ? <div className="loader">
                             <Spin tip="Issues are loading" size="large">
                                 <div className="content" />
                             </Spin>
                         </div>
-                        :
-                        <Column
+                        : <Column
                             onDropColumn={handleDropColumn}
                             onDragStart={handleStartDrag}
                             onDragEnd={dragEndHandler}
@@ -130,12 +139,7 @@ export const Board = () => {
                             onDragLeave={dragLeaveHandler}
                             onDropTask={handleDropTask}
                             currentIssue={currentIssue}
-                            dataSource={columns} 
-                            column={{
-                                title: "",
-                                data: [],
-                                id: 0
-                            }}                        
+                            columns={columns}
                         />
                     }
                 </div>

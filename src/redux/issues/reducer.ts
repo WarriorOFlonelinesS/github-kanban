@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TGetAllIssuesSuccess, TIssuesState } from "./types";
+import { TGetAllIssuesSuccess, TIssue, TIssuesState, TRepoInfoSuccess } from "./types";
+import { TPayload } from "./sagas";
 
 const initialState: TIssuesState = {
   toDo: [],
@@ -9,13 +10,14 @@ const initialState: TIssuesState = {
   openIssues: [],
   allIssues: [],
   closedIssues: [],
+  repoInfo: null,
 };
 
 const issuesSlice = createSlice({
   name: "issues",
   initialState,
   reducers: {
-    getAllIssuesRequest: (state, action: PayloadAction<any>) => {
+    getAllIssuesRequest: (state, action: PayloadAction<TPayload>) => {
       state.isLoading = true;
     },
     getAllIssuesSuccess: (
@@ -33,13 +35,21 @@ const issuesSlice = createSlice({
       );
       state.isLoading = false;
     },
+    getRepoInfoSuccess: (state, action: PayloadAction<TRepoInfoSuccess>) => {
+      console.log(action.payload);
+      state.repoInfo = action.payload;
+    },
     getAllIssuesFailure: (state) => {
       state.isLoading = false;
     },
   },
 });
 
-export const { getAllIssuesRequest, getAllIssuesSuccess, getAllIssuesFailure } =
-  issuesSlice.actions;
+export const {
+  getAllIssuesRequest,
+  getAllIssuesSuccess,
+  getAllIssuesFailure,
+  getRepoInfoSuccess,
+} = issuesSlice.actions;
 
 export default issuesSlice.reducer;
