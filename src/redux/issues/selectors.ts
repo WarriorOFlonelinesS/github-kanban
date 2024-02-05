@@ -14,5 +14,5 @@ export const getIsLoading = createSelector(
 );
 export const getRepoInfo = createSelector(
     getState,
-    data => data.repoInfo?.data,
+    data => data.repoInfo,
 );

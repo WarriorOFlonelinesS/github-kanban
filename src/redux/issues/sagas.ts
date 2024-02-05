@@ -7,8 +7,8 @@ import {
 
 import { TIssue, TRepoInfoSuccess } from "./types";
 import { PayloadAction } from "@reduxjs/toolkit";
-import { getGitHubApi } from "./urlHelpers/getGitHubApi";
-import { getGitHubApiIssues } from "./urlHelpers/getGitHubIssues";
+import { getGitHubApi } from "./helpers/getGitHubApi";
+import { getGitHubApiIssues } from "./helpers/getGitHubIssues";
 
 export type TPayload = {
   searchValue: string;
@@ -26,14 +26,11 @@ export function* getIssuesSaga(action: PayloadAction<TPayload>) {
     const repoResponse = yield fetch(apiUrl);
 
     const issues: Array<TIssue> = yield issuesResponse.json();
-    const repoIndo: TRepoInfoSuccess["data"] = yield repoResponse.json();
+    const repoInfo: TRepoInfoSuccess = yield repoResponse.json();
     yield put(getAllIssuesSuccess({ data: issues }));
     yield put(
       getRepoInfoSuccess({
-        data: repoIndo,
-        forks_count: undefined,
-        stargazers_count: undefined,
-        watchers_count: undefined,
+        ...repoInfo,
       })
     );
   } catch (error) {

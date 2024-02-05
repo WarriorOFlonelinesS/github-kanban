@@ -6,7 +6,7 @@ import {
     getIsLoading,
 } from "../redux/issues/selectors";
 import { TIssue } from "../redux/issues/types";
-import { Spin } from "antd";
+import { Loader } from "./Loader";
 
 export type TColumn = {
     id: number;
@@ -126,17 +126,13 @@ export const Board = () => {
             <div className="container">
                 <div className={`main-content ${isLoading ? 'loaded' : ' '}`}>
                     {isLoading
-                        ? <div className="loader">
-                            <Spin tip="Issues are loading" size="large">
-                                <div className="content" />
-                            </Spin>
-                        </div>
+                        ? < Loader />
                         : <Column
                             onDropColumn={handleDropColumn}
-                            onDragStart={handleStartDrag}
-                            onDragEnd={dragEndHandler}
-                            onDragOver={dragOverHandler}
-                            onDragLeave={dragLeaveHandler}
+                            onClickStart={handleStartDrag}
+                            onClickEnd={dragEndHandler}
+                            onClickOver={dragOverHandler}
+                            onClickLeave={dragLeaveHandler}
                             onDropTask={handleDropTask}
                             currentIssue={currentIssue}
                             columns={columns}

@@ -5,7 +5,7 @@ import { Alert } from "antd";
 import Search from "antd/es/input/Search";
 import { RepoInfo } from "./RepoInfo";
 import { TEvent } from "./types";
-import { parseRepoUrl } from "../redux/issues/urlHelpers/parseRepoUrl";
+import { parseRepoUrl } from "../redux/issues/helpers/parseRepoUrl";
 import { Links } from "./Links";
 
 export const Header = () => {
@@ -16,7 +16,7 @@ export const Header = () => {
 
     const sendUrl = (_: string, e: TEvent) => {
         e?.preventDefault();
-        if (searchValue.trim() === "") {
+        if (!searchValue) {
             setError(true);
         } else {
             dispatch(getAllIssuesRequest({ searchValue: searchValue }));

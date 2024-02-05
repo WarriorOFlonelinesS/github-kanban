@@ -132,11 +132,9 @@
   box-shadow: 0;
   width: 252px;
   height: 144px;
-  border: 1px solid black;
   flex-shrink: 0;
-  border-radius: 14px;
+  margin-bottom: 39px;
   background: #fff;
-  margin-top: 20px;
   text-align: start;
   padding-left: 10px;
   transition: opacity 0.3s ease;
@@ -176,6 +174,11 @@
 .ant-row {
   display: flex;
   justify-content: space-between;
+}
+
+.ant-card {
+  border-radius: 0px;
+  border: none;
 }
 
 .ant-card-head {

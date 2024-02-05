@@ -3,13 +3,13 @@ import { DragEvent } from "react";
 import { TIssue } from "../redux/issues/types";
 import Issue from "./Issue";
 import { Card, List } from "antd";
-import { TColumn } from "./Board";
+import { TCurrentColumn } from "./types";
 
 type TProps = {
     currentIssue: TIssue | null;
     onDropColumn: (e: DragEvent<HTMLDivElement>, columnId: number) => void;
-    onDragOver: (e: DragEvent<HTMLDivElement>) => void;
-    onDragStart: (
+    onClickOver: (e: DragEvent<HTMLDivElement>) => void;
+    onClickStart: (
         e: DragEvent<HTMLDivElement>,
         columnId: number,
         issue: TIssue
@@ -19,59 +19,61 @@ type TProps = {
         columnId: number,
         issue: TIssue
     ) => void;
-    onDragLeave: (e: DragEvent<HTMLDivElement>) => void;
-    onDragEnd: (e: DragEvent<HTMLDivElement>) => void;
-    columns: TColumn[]
+    onClickLeave: (e: DragEvent<HTMLDivElement>) => void;
+    onClickEnd: (e: DragEvent<HTMLDivElement>) => void;
+    columns: TCurrentColumn[];
 }
 
 const Column: React.FC<TProps> = ({
     columns,
     currentIssue,
     onDropColumn,
-    onDragOver,
-    onDragStart,
-    onDragEnd,
+    onClickOver,
+    onClickStart,
+    onClickEnd,
     onDropTask,
-    onDragLeave,
+    onClickLeave,
 }) => {
     const [draggedOver, setDraggedOver] = useState(false);
-    console.log()
+
     return (
         <div className="column">
             <List
                 grid={{
                     gutter: 10,
-                    xs: 1,
+                    sm: 1
                 }}
                 dataSource={columns}
-                renderItem={(item: TIssue) => (
+                renderItem={(column:  TCurrentColumn) => (
                     <List.Item>
-                        <Card title={`${item.title} (${item.data.length})` } onDragOver={(e) => {
-                            onDragOver(e);
-                            setDraggedOver(true);
-                        }}
+                        <Card
+                            title={`${column.title} (${column.data.length})`}
+                            onDragOver={(e) => {
+                                onClickOver(e);
+                                setDraggedOver(true);
+                            }}
                             onDragLeave={(e) => {
-                                onDragLeave(e);
+                                onClickLeave(e);
                                 setDraggedOver(false);
                             }}
                         >
                             <div
                                 className={`column-area ${draggedOver ? "dragged-over" : ""}`}
-                                onDragOver={onDragOver}
-                                onDrop={(e) => onDropColumn(e, item.id)}
+                                onDragOver={onClickOver}
+                                onDrop={(e) => onDropColumn(e, column.id)}
                             >
-                                {item.data.length
-                                    ? item.data.map((issue: TIssue) => (
+                                {column.data.length
+                                    ? column.data.map((issue: TIssue) => (
                                         <Issue
                                             key={issue.id}
                                             isDragged={currentIssue === issue}
                                             issue={issue}
-                                            columnId={item.id}
-                                            onDragEnd={onDragEnd}
+                                            columnId={column.id}
+                                            onDragEnd={onClickEnd}
                                             onDrop={onDropTask}
-                                            onDragStart={onDragStart}
-                                            onDragOver={onDragOver}
-                                            onDragLeave={onDragLeave}
+                                            onDragStart={onClickStart}
+                                            onDragOver={onClickOver}
+                                            onDragLeave={onClickLeave}
                                         />
                                     ))
                                     : <div className="column__empty">No items</div>
@@ -84,5 +86,6 @@ const Column: React.FC<TProps> = ({
         </div>
     );
 }
+
 
 export default memo(Column);

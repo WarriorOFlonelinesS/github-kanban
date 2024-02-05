@@ -6,8 +6,6 @@ export type TCurrentColumn = {
   id: number;
 };
 
-export type TColumnsState = Record<string, TCurrentColumn>;
-
 export type TEvent =
   | React.ChangeEvent<HTMLInputElement>
   | React.MouseEvent<HTMLElement>

@@ -1,5 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TGetAllIssuesSuccess, TIssue, TIssuesState, TRepoInfoSuccess } from "./types";
+import {
+  TGetAllIssuesSuccess,
+  TIssue,
+  TIssuesState,
+  TRepoInfoSuccess,
+} from "./types";
 import { TPayload } from "./sagas";
 
 const initialState: TIssuesState = {
@@ -36,7 +41,6 @@ const issuesSlice = createSlice({
       state.isLoading = false;
     },
     getRepoInfoSuccess: (state, action: PayloadAction<TRepoInfoSuccess>) => {
-      console.log(action.payload);
       state.repoInfo = action.payload;
     },
     getAllIssuesFailure: (state) => {
