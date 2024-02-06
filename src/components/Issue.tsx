@@ -1,6 +1,5 @@
 import { DragEvent } from "react";
 import { TIssue } from "../redux/issues/types";
-import { Card } from "antd";
 
 type TProps = {
     issue: TIssue;
@@ -23,7 +22,7 @@ const Issue: React.FC<TProps> = ({
     onDragLeave,
     onDragStart,
 }) => {
-
+    console.log(issue)
     const handleDrop = (e: DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         onDrop(e, columnId, issue);
@@ -49,11 +48,11 @@ const Issue: React.FC<TProps> = ({
             onDrop={handleDrop}
             draggable
         >
-            <Card className={`column-item `}>
+            <div className={`column-item ${isDragged ? "dragged" : ""}`}>
                 <p className="item__header">{issue.title}</p>
                 <p className="item__text">#{issue.number} {issue.state === "closed" ? "closed" : `opened ${daysDifference} ${daysDifference === 1 ? "day" : "days"} ago`}</p>
                 <p className="item__status">{issue.user.type} | comments {issue.comments}</p>
-            </Card>
+            </div>
         </div>
     );
 }

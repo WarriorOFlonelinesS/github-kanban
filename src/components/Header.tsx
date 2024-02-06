@@ -16,12 +16,15 @@ export const Header = () => {
 
     const sendUrl = (_: string, e: TEvent) => {
         e?.preventDefault();
-        if (!searchValue) {
-            setError(true);
-        } else {
-            dispatch(getAllIssuesRequest({ searchValue: searchValue }));
-            setError(false);
-        }
+            if (!searchValue) {
+                setError(true);
+            } else {
+                console.log(e)
+                dispatch(getAllIssuesRequest({ searchValue: searchValue }));
+                setError(false);
+            }
+
+
     };
 
     return (
@@ -30,14 +33,14 @@ export const Header = () => {
                 <form className="header-form">
                     <Search
                         placeholder="Enter repo URL"
-                        allowClear
                         enterButton="Load issues"
                         size="large"
                         onChange={(e) => setSearchValue(e.target.value)}
                         onSearch={sendUrl}
+
                     />
                 </form>
-                {error && <Alert message="Invalid input!" type="error" />}
+                {error && <Alert message='Invalid input!' type="error"/>}
                 <div className="navigation">
                     <Links repo1={repo1} repo2={repo2} repo3={repo3} />
                     <RepoInfo />

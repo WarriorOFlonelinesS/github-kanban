@@ -1,3 +1,12 @@
+html{
+display: flex;
+justify-content: center;
+}
+body {
+  font-family: "IBM Plex Mono";
+  width: 60%;
+}
+
 .container {
   margin: 0 20px;
 }
@@ -23,11 +32,10 @@
 
 .header__input {
   height: 26.57px;
-  width: 85%;
+
   border: 5px solid #d9d9d9;
   background: #fff;
   color: #909090;
-
   font-family: "IBM Plex Mono";
   font-size: 15px;
   font-style: normal;
@@ -49,11 +57,11 @@
 }
 
 .navigation {
-  font-family: "IBM Plex Mono";
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 4px;
+  margin-top: 0px;
+  margin-bottom: -44px;
 }
 
 .links {
@@ -68,6 +76,7 @@
 }
 
 .repo-info-item {
+  height: 29px;
   display: flex;
   margin-right: 10px;
   background-color: #eaeaea;
@@ -77,6 +86,7 @@
 
 .repo-info-text {
   margin-left: 10px;
+  margin-top: 2px;
 }
 
 .navigation__link {
@@ -106,6 +116,7 @@
 
 .column {
   text-align: center;
+  height: 100%;
 }
 
 .column__title {
@@ -118,12 +129,8 @@
 }
 
 .column-area {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   min-width: 283px;
   min-height: 390px;
-  flex-shrink: 0;
   margin-top: -10px;
 }
 
@@ -131,13 +138,17 @@
   opacity: 1;
   box-shadow: 0;
   width: 252px;
-  height: 144px;
-  flex-shrink: 0;
-  margin-bottom: 39px;
+  border: 1px solid black;
+  border-radius: 14px;
   background: #fff;
+  margin-top: 20px;
   text-align: start;
   padding-left: 10px;
   transition: opacity 0.3s ease;
+}
+
+.ant-card {
+  font-family: "IBM Plex Mono";
 }
 
 .column-item.dragged {
@@ -173,12 +184,8 @@
 
 .ant-row {
   display: flex;
+  align-items: stretch;
   justify-content: space-between;
-}
-
-.ant-card {
-  border-radius: 0px;
-  border: none;
 }
 
 .ant-card-head {

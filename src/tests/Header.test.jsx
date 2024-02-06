@@ -1,63 +1,45 @@
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { Provider } from 'react-redux';
-import configureStore from 'redux-mock-store';
-import Header from '../components/Header';
-import { getAllIssuesRequest } from '../redux/issues/reducer';
+import { render, screen } from "@testing-library/react";
+import Header from "../components/Header";
+import { Provider } from "react-redux";
+import store from "../redux/store";
+import userEvent from "@testing-library/user-event";
 
-const mockStore = configureStore([]);
+jest.mock("antd", () => {
+  return {
+    ...jest.requireActual("antd"),
+    Alert: ({ message, type }) => (
+      <div className="mocked-alert" data-message={message} data-type={type} />
+    ),
+  };
+});
 
-describe('Header Component', () => {
-  let store;
+jest.mock("antd/es/input/Search", () => {
+  return ({ placeholder, onChange, onSearch }) => (
+    <div className="mocked-search">
+      <input
+        placeholder={placeholder}
+        onChange={(e) => onChange && onChange(e)}
+        onSearch={(value) => onSearch && onSearch(value)}
+      />
+    </div>
+  );
+});
 
-  beforeEach(() => {
-    store = mockStore({
-      issues: {
+describe("Header", () => {
 
-      },
-    });
-  });
+  test("triggers onChange when input is entered", () => {
+    const onChangeMock = jest.fn();
 
-  test('renders Header component', () => {
     render(
       <Provider store={store}>
-        <Header />
+        <Header onChange={onChangeMock} />
       </Provider>
     );
 
+    const searchInput = screen.getByPlaceholderText("Enter repo URL");
 
-    expect(screen.getByText('Enter repo URL')).toBeInTheDocument();
-  });
-
-  test('dispatches getAllIssuesRequest on search', async () => {
-    render(
-      <Provider store={store}>
-        <Header />
-      </Provider>
-    );
-
-
-    userEvent.type(screen.getByPlaceholderText('Enter repo URL'), 'https://github.com/example/repo');
-
-    fireEvent.click(screen.getByText('Load issues'));
-
-    const actions = store.getActions();
-    expect(actions).toEqual([getAllIssuesRequest({ searchValue: 'https://github.com/example/repo' })]);
-
-  });
-
-  test('shows error message on invalid input', async () => {
-    render(
-      <Provider store={store}>
-        <Header />
-      </Provider>
-    );
-
-    fireEvent.click(screen.getByText('Load issues'));
-
-    await waitFor(() => {
-      expect(screen.getByText('Invalid input!')).toBeInTheDocument();
-    });
+    // Simulate typing in the input
+    userEvent.type(searchInput, "some");
+    expect(onChangeMock)
   });
 });

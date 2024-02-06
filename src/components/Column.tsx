@@ -34,6 +34,7 @@ const Column: React.FC<TProps> = ({
     onDropTask,
     onClickLeave,
 }) => {
+    
     const [draggedOver, setDraggedOver] = useState(false);
 
     return (
