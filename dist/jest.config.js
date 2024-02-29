@@ -8,6 +8,7 @@ module.exports = {
   },
   coveragePathIgnorePatterns: ["/node_modules/"],
   moduleNameMapper: {
-    "\\.(css|less)$": "identity-obj-proxy"
+    "\\.(css|less)$": "identity-obj-proxy",
+    '^antd/es/input/Search$': 'antd/lib/input/Search'
   }
 };
