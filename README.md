@@ -62,7 +62,7 @@ GitHub-Kanban is an application provides Kanban board functionality for managing
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/WarriorOFlonelinesS/Restaurant.git
+   git clone https://github.com/WarriorOFlonelinesS/github-kanban.git
    ```
 2. Install NPM packages
    ```sh
@@ -107,8 +107,6 @@ Email - yar.gorlenko@gmail.com
 LinkedIn - [Yaroslav Gorlenko](https://www.linkedin.com/in/yaroslav-gorlenko-a6bb60297/)
 
 Project Link: [DVA VARENYKY](https://github.com//WarriorOFlonelinesS/Restaurant)
-
-Ready project: https://dva-varenika.netlify.app/
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
