@@ -43,11 +43,8 @@ GitHub-Kanban is an application provides Kanban board functionality for managing
 + Track progress: GitHub-Kanban provides tools for tracking progress on issues and projects, as well as managing priorities.
 ### Built With
 
-* [![JavaScript][JavaScript]][JavaScript-url]
-* [![HTML][HTML]][HTML-url]
-* [![CSS3][CSS3]][CSS3-url]
-* [![PHP][PHP]][PHP-url]
-* [![MYSQL][MYSQL]][MYSQL-url]
+* [![React][React]][React-url]
+* [![Redux][Redux]][Redux-url]
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -76,34 +73,22 @@ GitHub-Kanban is an application provides Kanban board functionality for managing
 
 ## Usage
 <p>
-  For ordering a dish, you need to click on buttons 'Замовити'. Also you can scroll by orange buttons.
+  Before you start using it, you need to enter the address of the GitHub repository
 </p>
 
-<img src = 'https://github.com/WarriorOFlonelinesS/Restaurant/assets/98014616/26ed6ee2-5e74-42c1-ba6d-4483c01cfa93'>
-<br>
+![image](https://github.com/WarriorOFlonelinesS/github-kanban/assets/98014616/39ebd09a-1ed6-4d9d-af71-1dc5dbb32f50)
 
 <p>
-  After ordering, a message will appeare:
+  
+you can see the number of star views and forks. Also, you can move cards with isseus
 </p>
 
-<div align='center'>
-  <img src='https://github.com/WarriorOFlonelinesS/Restaurant/assets/98014616/51b78d7a-4ca5-47d5-8c72-dd03957b4307'>
-</div>
+![image](https://github.com/WarriorOFlonelinesS/github-kanban/assets/98014616/212b6fa7-1e72-4803-865d-d1f9dbf4a1c9)
 
-<p>
-  Next, you should click on an icon of a cart, and you will see this window:
-</p>
-
-<img src="https://github.com/WarriorOFlonelinesS/Restaurant/assets/98014616/3c64b542-0e8d-4d57-b85d-795215edcc47" alt="cart">
-
-<p>
-    When you switched from the cart to window 'Оформлення замовлення' by clicking on appropriate button.
-</p>
-
-<img src='https://github.com/WarriorOFlonelinesS/Restaurant/assets/98014616/5384da56-a95f-4071-aa4c-ae7e85c9e74c'>
-'Finally, you need fill a form and click on "Оформити"
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
 
 ## Contributing
 
@@ -128,13 +113,7 @@ Ready project: https://dva-varenika.netlify.app/
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 [product-screenshot]: images/screenshot.png
-[JavaScript]: https://img.shields.io/badge/javascript-20232A?style=for-the-badge&logo=javascript&logoColor=yellow
-[JavaScript-url]: https://developer.mozilla.org/en-US/docs/Web/JavaScript
-[HTML]: https://img.shields.io/badge/html5-20232A?style=for-the-badge&logo=html5&logoColor=red
-[HTML-url]: [https://reactjs.org/](https://developer.mozilla.org/ru/docs/Web/HTML)
-[CSS3]: https://img.shields.io/badge/css3-20232A?style=for-the-badge&logo=css3&logoColor=blue
-[CSS3-url]: [https://reactjs.org/](https://developer.mozilla.org/ru/docs/Web/HTML)
-[PHP]: https://img.shields.io/badge/php-20232A?style=for-the-badge&logo=php&logoColor=#777BB4
-[PHP-url]: https://www.php.net/manual/ru/intro-whatis.php
-[MYSQL]: https://img.shields.io/badge/mysql-20232A?style=for-the-badge&logo=mysql&logoColor=#4479A1
-[MYSQL-url]: https://www.mysql.com
+[React]: https://img.shields.io/badge/react-20232A?style=for-the-badge&logo=react&logoColor=blue
+[React-url]: https://legacy.reactjs.org/
+[Redux]: https://img.shields.io/badge/redux-20232A?style=for-the-badge&logo=redux&logoColor=764abc
+[Redux-url]: https://redux.js.org/
