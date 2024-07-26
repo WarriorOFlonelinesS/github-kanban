@@ -50,7 +50,6 @@ const dragHandlers = {
 
 
       columnCopy.data.push(curentItem);
-
       setColumns(
         columns.map(col => {
           if (col.id === columnCopy.id) {
