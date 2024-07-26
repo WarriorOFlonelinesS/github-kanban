@@ -36,7 +36,7 @@ export default function Home() {
         </div>
         <Menu isOpen={isOpen} toggleMenu={toggleMenu} />
       </header >
-      <main className="p-4 flex pt-10 min-w-[350px] overflow-auto h-[100vh]">
+      <main className="p-4 flex pt-10 min-w-[350px] overflow-auto h-full">
         <PanelUsers />
         <Board />
       </main>
